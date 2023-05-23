@@ -2,6 +2,7 @@ package site.leui.chat_example.bounded_context.dto.chat_room;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketSession;
 import site.leui.chat_example.bounded_context.dto.chat_message.ChatMessage;
 import site.leui.chat_example.bounded_context.service.ChatService;
@@ -9,11 +10,12 @@ import site.leui.chat_example.bounded_context.service.ChatService;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Getter
 public class ChatRoom {
-    private String roomId;
-    private String name;
-    private Set<WebSocketSession> sessions = new HashSet<>();
+    private final String roomId;
+    private final String name;
+    private final Set<WebSocketSession> sessions = new HashSet<>();
 
     @Builder
     public ChatRoom(String roomId, String name) {
