@@ -1,4 +1,4 @@
-package site.leui.chat_example.bounded_context.entity;
+package site.leui.chat_example.bounded_context.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -26,10 +26,10 @@ public class ChatRoom {
     public void sendMessage(TextMessage message) {
         this.getSessions()
                 .parallelStream()
-                .forEach(session -> sendMessage(session, message));
+                .forEach(session -> sendMessageToSession(session, message));
     }
 
-    private void sendMessage(WebSocketSession session, TextMessage message) {
+    private void sendMessageToSession(WebSocketSession session, TextMessage message) {
         try {
             session.sendMessage(message);
         } catch (IOException e) {

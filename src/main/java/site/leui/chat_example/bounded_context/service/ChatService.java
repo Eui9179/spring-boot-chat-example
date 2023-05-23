@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import site.leui.chat_example.base.Util;
-import site.leui.chat_example.bounded_context.entity.ChatMessage;
-import site.leui.chat_example.bounded_context.entity.ChatRoom;
+import site.leui.chat_example.bounded_context.dto.ChatMessage;
+import site.leui.chat_example.bounded_context.dto.ChatRoom;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
