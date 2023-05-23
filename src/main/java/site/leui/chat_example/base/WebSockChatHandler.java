@@ -14,7 +14,6 @@ import site.leui.chat_example.bounded_context.service.ChatService;
 @Component
 @Slf4j
 public class WebSockChatHandler extends TextWebSocketHandler {
-    private final ObjectMapper objectMapper;
     private final ChatService chatService;
 
     @Override
