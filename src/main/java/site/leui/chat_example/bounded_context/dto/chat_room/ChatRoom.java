@@ -23,6 +23,7 @@ public class ChatRoom {
 
     public void handleAction(WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
         if (chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER)) {
+            sessions.add(session);
             chatMessage.setMessage(chatMessage.getSender() + "님 환영합니다.");
         }
         sendMessage(chatMessage, chatService);
