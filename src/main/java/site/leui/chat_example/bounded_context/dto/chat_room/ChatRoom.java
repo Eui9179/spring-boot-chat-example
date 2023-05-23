@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
 import site.leui.chat_example.bounded_context.dto.chat_message.ChatMessage;
+import site.leui.chat_example.bounded_context.service.ChatService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,10 +25,17 @@ public class ChatRoom {
         if (chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER)) {
             chatMessage.setMessage(chatMessage.getSender() + "님 환영합니다.");
         }
-
+        sendMessage(chatMessage, chatService);
     }
 
     public <T> void sendMessage(T message, ChatService chatService) {
         sessions.parallelStream().forEach(session -> chatService.sendMessage(session, message));
+    }
+
+    public static ChatRoom of(String roomId, String name) {
+        return ChatRoom.builder()
+                .roomId(roomId)
+                .name(name)
+                .build();
     }
 }
