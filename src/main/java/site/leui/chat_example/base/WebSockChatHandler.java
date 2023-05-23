@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import site.leui.chat_example.bounded_context.dto.chat_message.ChatMessage;
-import site.leui.chat_example.bounded_context.dto.chat_room.ChatRoom;
+import site.leui.chat_example.bounded_context.entity.ChatMessage;
 import site.leui.chat_example.bounded_context.service.ChatService;
 
 @RequiredArgsConstructor
@@ -19,10 +18,9 @@ public class WebSockChatHandler extends TextWebSocketHandler {
     private final ChatService chatService;
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String payload = message.getPayload();
-        ChatMessage chatMessage = objectMapper.readValue(payload, ChatMessage.class);
-        ChatRoom room = chatService.findRoomId(chatMessage.getRoomId());
-        room.handleAction(session, chatMessage, chatService);
+        ChatMessage chatMessage = Util.Chat.resolvePayload(payload);
+        chatService.handleAction(chatMessage.getRoomId(), session, chatMessage);
     }
 }

@@ -1,15 +1,15 @@
 package site.leui.chat_example.bounded_context.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import site.leui.chat_example.bounded_context.dto.chat_room.ChatRoom;
+import site.leui.chat_example.base.Util;
+import site.leui.chat_example.bounded_context.entity.ChatMessage;
+import site.leui.chat_example.bounded_context.entity.ChatRoom;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -17,7 +17,6 @@ import java.util.*;
 @Service
 public class ChatService {
 
-    private final ObjectMapper objectMapper;
     private Map<String, ChatRoom> chatRooms;
 
     @PostConstruct
@@ -29,7 +28,7 @@ public class ChatService {
         return new ArrayList<>(chatRooms.values());
     }
 
-    public ChatRoom findRoomId(String roomId) {
+    public ChatRoom findRoomById(String roomId) {
         return chatRooms.get(roomId);
     }
 
@@ -40,11 +39,23 @@ public class ChatService {
         return chatRoom;
     }
 
-    public <T> void sendMessage(WebSocketSession session, T message) {
-        try {
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void handleAction(
+            String roomId,
+            WebSocketSession session,
+            ChatMessage chatMessage
+    ) {
+        ChatRoom room = findRoomById(roomId);
+
+        if (isEnterRoom(chatMessage)) {
+            room.join(session);
+            chatMessage.setMessage(chatMessage.getSender() + "님 환영합니다.");
         }
+
+        TextMessage textMessage = Util.Chat.resolveTextMessage(chatMessage);
+        room.sendMessage(textMessage);
+    }
+
+    private boolean isEnterRoom(ChatMessage chatMessage) {
+        return chatMessage.getMessageType().equals(ChatMessage.MessageType.ENTER);
     }
 }
