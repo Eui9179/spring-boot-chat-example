@@ -1,9 +1,9 @@
-package site.leui.chat_example.bounded_context.controller;
+package site.leui.chat_example.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import site.leui.chat_example.bounded_context.dto.ChatRoom;
-import site.leui.chat_example.bounded_context.service.ChatService;
+import site.leui.chat_example.chat.dto.ChatRoom;
+import site.leui.chat_example.chat.service.ChatService;
 
 import java.util.List;
 

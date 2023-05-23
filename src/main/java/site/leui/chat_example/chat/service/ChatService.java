@@ -1,4 +1,4 @@
-package site.leui.chat_example.bounded_context.service;
+package site.leui.chat_example.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import site.leui.chat_example.base.Util;
-import site.leui.chat_example.bounded_context.dto.ChatMessage;
-import site.leui.chat_example.bounded_context.dto.ChatRoom;
+import site.leui.chat_example.chat.dto.ChatMessage;
+import site.leui.chat_example.chat.dto.ChatRoom;
 
 import javax.annotation.PostConstruct;
 import java.util.*;

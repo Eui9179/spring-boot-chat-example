@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import site.leui.chat_example.bounded_context.dto.ChatMessage;
-import site.leui.chat_example.bounded_context.service.ChatService;
+import site.leui.chat_example.chat.dto.ChatMessage;
+import site.leui.chat_example.chat.service.ChatService;
 
 @RequiredArgsConstructor
 @Component

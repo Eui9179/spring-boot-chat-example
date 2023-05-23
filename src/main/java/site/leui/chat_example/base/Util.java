@@ -3,7 +3,7 @@ package site.leui.chat_example.base;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
-import site.leui.chat_example.bounded_context.dto.ChatMessage;
+import site.leui.chat_example.chat.dto.ChatMessage;
 
 public class Util {
     public static class Chat {

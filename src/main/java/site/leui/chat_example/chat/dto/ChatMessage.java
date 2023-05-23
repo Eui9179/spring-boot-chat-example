@@ -1,4 +1,4 @@
-package site.leui.chat_example.bounded_context.dto;
+package site.leui.chat_example.chat.dto;
 
 import lombok.*;
 
