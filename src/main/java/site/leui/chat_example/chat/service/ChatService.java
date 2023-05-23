@@ -8,34 +8,28 @@ import org.springframework.web.socket.WebSocketSession;
 import site.leui.chat_example.base.Util;
 import site.leui.chat_example.chat.dto.ChatMessage;
 import site.leui.chat_example.chat.dto.ChatRoom;
+import site.leui.chat_example.chat.repository.ChatRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class ChatService {
-
-    private Map<String, ChatRoom> chatRooms;
-
-    @PostConstruct
-    private void init() {
-        chatRooms = new HashMap<>();
-    }
+    private final ChatRepository chatRepository;
 
     public List<ChatRoom> findAll() {
-        return new ArrayList<>(chatRooms.values());
+        return chatRepository.findAll();
     }
 
     public ChatRoom findRoomById(String roomId) {
-        return chatRooms.get(roomId);
+        return chatRepository.findById(roomId);
     }
 
     public ChatRoom createRoom(String name) {
         String roomId = UUID.randomUUID().toString();
         ChatRoom chatRoom = ChatRoom.of(roomId, name);
-        chatRooms.put(roomId, chatRoom);
+        chatRepository.save(roomId, chatRoom);
         return chatRoom;
     }
 
