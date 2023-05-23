@@ -10,9 +10,7 @@ import site.leui.chat_example.bounded_context.dto.chat_room.ChatRoom;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +23,10 @@ public class ChatService {
     @PostConstruct
     private void init() {
         chatRooms = new HashMap<>();
+    }
+
+    public List<ChatRoom> findAll() {
+        return new ArrayList<>(chatRooms.values());
     }
 
     public ChatRoom findRoomId(String roomId) {
