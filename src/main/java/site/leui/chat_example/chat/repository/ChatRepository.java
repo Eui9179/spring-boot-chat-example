@@ -1,28 +1,26 @@
 package site.leui.chat_example.chat.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import site.leui.chat_example.chat.dto.ChatRoom;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@RequiredArgsConstructor
 @Repository
 public class ChatRepository {
-    private final Map<String, ChatRoom> chatRooms;
 
-    public void save(String roomId, ChatRoom chatRoom) {
-        chatRooms.put(roomId, chatRoom);
+    private final Map<String, ChatRoom> chatRoomMap = new LinkedHashMap<>();
+
+    public void save(ChatRoom chatRoom) {
+        chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
     }
 
     public ChatRoom findById(String roomId) {
-        return chatRooms.get(roomId);
+        return chatRoomMap.get(roomId);
     }
 
     public List<ChatRoom> findAll() {
-        return new ArrayList<>(chatRooms.values());
+        List<ChatRoom> chatRooms = new ArrayList<>(chatRoomMap.values());
+        Collections.reverse(chatRooms);
+        return chatRooms;
     }
-
 }

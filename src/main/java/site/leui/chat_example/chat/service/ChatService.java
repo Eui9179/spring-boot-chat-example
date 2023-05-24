@@ -27,9 +27,8 @@ public class ChatService {
     }
 
     public ChatRoom createRoom(String name) {
-        String roomId = UUID.randomUUID().toString();
-        ChatRoom chatRoom = ChatRoom.of(roomId, name);
-        chatRepository.save(roomId, chatRoom);
+        ChatRoom chatRoom = ChatRoom.of(name);
+        chatRepository.save(chatRoom);
         return chatRoom;
     }
 
