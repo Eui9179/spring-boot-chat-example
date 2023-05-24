@@ -1,25 +1,26 @@
 package site.leui.chat_example.chat.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import site.leui.chat_example.chat.dto.ChatRoom;
-import site.leui.chat_example.chat.service.ChatService;
-
-import java.util.List;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
+import site.leui.chat_example.chat.dto.ChatMessage;
 
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/chat")
+@Controller
 public class ChatController {
-    private final ChatService chatService;
 
-    @PostMapping
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatService.createRoom(name);
+    private final SimpMessageSendingOperations messagingTemplate;
+
+    @MessageMapping("/chat/message")
+    public void sendMessage(ChatMessage message) {
+        if (isJoin(message))
+            message.setMessage(message.getSender() + "님이 입장하였습니다");
+
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
-    @GetMapping
-    public List<ChatRoom> getAll() {
-        return chatService.findAll();
+    private boolean isJoin(ChatMessage messageType) {
+        return messageType.getMessageType().equals(ChatMessage.MessageType.JOIN);
     }
 }
