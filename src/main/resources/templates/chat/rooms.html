@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="chat/layout::head"></div>
+
+<body class="flex justify-center h-screen">
+<!--  채팅 박스  -->
+<div class="flex flex-col w-8/12 mt-6">
+    <div class="text-3xl font-semibold">채팅</div>
+    <!--   가로선   -->
+    <div class="border border-inherit mt-4"></div>
+    <div class="flex justify-start h-5/6 w-full">
+        <!--   세로선 시작선    -->
+        <div class="border border-inherit h-full"></div>
+        <!--   채팅방     -->
+        <div class="flex flex-col w-2/6">
+            <!--     채팅방 아이템     -->
+            <button class="flex p-3 hover:bg-zinc-200">
+                <!--      아바타      -->
+                <div class="inline-block h-11 w-11 rounded-full bg-zinc-300"></div>
+                <!--      사용자 이름, 시간, 마지막 채팅      -->
+                <div class="flex flex-col items-start ml-2">
+                    <!--       사용자 이름, 시간       -->
+                    <div class="flex items-baseline">
+                        <div class="font-semibold">사용자1</div>
+                        <div class="ml-2 text-xs text-zinc-500">2분전</div>
+                    </div>
+                    <!--       마지막 채팅       -->
+                    <div class="flex text-sm text-zinc-700">안녕하세요</div>
+                </div>
+            </button>
+        </div>
+        <!--   세로선 채팅방 오른쪽     -->
+        <div class="border border-inherit"></div>
+
+        <!--    채팅 내용    -->
+        <div class="flex flex-col justify-end w-full">
+            <div class="flex justify-end">안녕하세요1</div>
+            <div class="flex justify-start">안녕하세요2</div>
+        </div>
+        <!--   세로선 채팅창 오른쪽     -->
+        <div class="border border-inherit"></div>
+    </div>
+</div>
+
+</body>
+
+</html>
