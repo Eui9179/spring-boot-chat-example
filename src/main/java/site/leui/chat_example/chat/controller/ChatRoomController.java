@@ -3,10 +3,7 @@ package site.leui.chat_example.chat.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import site.leui.chat_example.chat.dto.ChatRoom;
 import site.leui.chat_example.chat.service.ChatRoomService;
 
@@ -18,23 +15,28 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    @GetMapping("/rooms")
-    public String getRooms(Model model) {
+    @GetMapping("/chat/rooms-all")
+    public String getAllRooms(Model model) {
         List<ChatRoom> chatRooms = chatRoomService.findAll();
-        model.addAttribute(chatRooms);
-        return "/chat/rooms";
+        model.addAttribute("chatRooms", chatRooms);
+        return "/chat/home";
     }
 
-    @PostMapping("room")
+    @GetMapping("/chat/rooms")
+    @ResponseBody
+    public List<ChatRoom> getRooms() {
+        return chatRoomService.findAll();
+    }
+
+    @PostMapping("/chat/room")
     public String createRoom(@RequestParam String name) {
         chatRoomService.createRoom(name);
         return "redirect:/chat/rooms";
     }
 
-    @GetMapping("/room/{roomId}")
-    public String getRoom(Model model, @PathVariable String roomId) {
-        ChatRoom chatRoom = chatRoomService.findRoomById(roomId);
-        model.addAttribute(chatRoom);
-        return "/chat/room";
+    @GetMapping("/chat/room/{roomId}")
+    @ResponseBody
+    public ChatRoom getRoom(@PathVariable String roomId) {
+        return chatRoomService.findRoomById(roomId);
     }
 }
