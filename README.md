@@ -6,3 +6,5 @@
 
 ### v2
 - Stomp 적용
+- vue js 적용
+- 채팅 ui
