@@ -9,4 +9,4 @@
 - vue js 적용
 - 채팅 ui
 
-![화면_기록_2023-05-26_오후_2_21_00_AdobeExpress (1).gif](..%2F..%2F..%2F..%2FDownloads%2F%ED%99%94%EB%A9%B4_%EA%B8%B0%EB%A1%9D_2023-05-26_%EC%98%A4%ED%9B%84_2_21_00_AdobeExpress%20%281%29.gif)
+![화면_기록_2023-05-26_오후_2_21_00_AdobeExpress (1)](https://github.com/Eui9179/spring-boot-chat-example/assets/83222282/c3477233-4063-492d-8e3b-5755cdb7c68a)
