@@ -16,9 +16,7 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping("/chat/rooms-all")
-    public String getAllRooms(Model model) {
-        List<ChatRoom> chatRooms = chatRoomService.findAll();
-        model.addAttribute("chatRooms", chatRooms);
+    public String getAllRooms() {
         return "/chat/home";
     }
 
