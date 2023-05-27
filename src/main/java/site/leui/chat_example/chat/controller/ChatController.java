@@ -17,7 +17,6 @@ public class ChatController {
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage message) {
         if (isJoin(message)) {
-
             chatRoomService.enterChatRoom(message.getRoomId());
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
         }

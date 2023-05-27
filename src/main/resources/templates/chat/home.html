@@ -15,8 +15,9 @@
         <div class="flex flex-col w-2/6 justify-between">
             <div class="flex flex-col">
                 <!--     채팅방 아이템     -->
-                <button class="flex p-3 hover:bg-zinc-200" v-for="chatRoom in chatRooms" :key="chatRoom.roomId"
-                        @click="connectRoom(chatRoom.roomId)">
+                <button class="flex p-3 hover:bg-zinc-200" :class="{'bg-zinc-200': chatRoom.checked}"
+                        v-for="chatRoom in chatRooms" :key="chatRoom.roomId"
+                        v-on:click="connectRoom(chatRoom.roomId)">
                     <!--      아바타      -->
                     <div class="inline-block w-11 h-11 min-w-[44px] rounded-full bg-zinc-300"></div>
                     <!--      사용자 이름, 시간, 마지막 채팅      -->
@@ -39,12 +40,32 @@
 
         <!--    채팅 내용    -->
         <div class="flex flex-col justify-end w-full">
-            <div id="messageArea"></div>
+            <div class="my-1" v-for="(recv, i) in messages" v-bind:key="i">
+                <div v-if="recv.messageType === 'JOIN'">
+                    <welcome v-bind:recv="recv"></welcome>
+                </div>
+                <div v-else-if="recv.isMe">
+                    <div class="flex justify-end px-5">
+                        <div class="border border-blue-100 py-1 px-3 bg-blue-100 rounded-md">
+                            {{ recv.message }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="flex justify-start px-5">
+                        <div class="border border-zinc-100 py-1 px-3 bg-zinc-100 rounded-md">
+                            {{ recv.message }}
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--     채팅 입력 input     -->
             <div class="mb-3 mt-5">
                 <div class="flex justify-between">
-                    <input type="text" placeholder="메시지를 입력해주세요" class="w-full ml-3" v-model="message"
-                           @keyup.enter="sendMessage"/>
+                    <label class="w-full ml-3">
+                        <input type="text" placeholder="메시지를 입력해주세요" class="w-full" v-model="message"
+                               @keyup.enter="sendMessage"/>
+                    </label>
                     <button class="min-w-[8%]" @click="sendMessage">전송</button>
                 </div>
             </div>
@@ -60,14 +81,15 @@
     let socket;
     let ws;
     // vue
-    new Vue({
+    const vm = new Vue({
         el: '#app',
         data: {
             chatRooms: [],
-            currentRoomId: "",
             messages: [],
+            roomId: "",
             message: "",
             sender: "",
+
         },
         created() {
             axios.get('/chat/rooms').then(response => {
@@ -75,7 +97,8 @@
                 res.forEach(item => {
                     this.chatRooms.push({
                         roomId: item.roomId,
-                        name: item.name
+                        name: item.name,
+                        checked: false
                     })
                 })
             });
@@ -83,19 +106,16 @@
         },
         methods: {
             addMessage(recv) {
-                let result;
-                if (recv.messageType === "JOIN") {
-                    result = "<div class=\"flex justify-center\">" + recv.message + "</div>"
-                } else if (recv.sender === this.sender){
-                    result = "<div class=\"flex justify-end px-5 \">" + recv.message + "</div>"
-                } else {
-                    result = "<div class=\"flex justify-start px-5 \">" + recv.message + "</div>"
-                }
-                $("#messageArea").append(result);
+                recv.isMe = recv.sender === this.sender;
+                this.messages.push(recv);
             },
             connectRoom(roomId) {
-                this.currentRoomId = roomId;
-                this.connect();
+                if (roomId !== this.roomId) {
+                    this.messages = [];
+                    this.updateCheck(roomId);
+                    this.roomId = roomId;
+                    this.connect();
+                }
             },
             recvMessage(recv) {
                 this.addMessage(recv);
@@ -104,26 +124,34 @@
                 ws.send("/pub/chat/message", {},
                     JSON.stringify({
                         messageType: 'TALK',
-                        roomId: this.currentRoomId,
+                        roomId: this.roomId,
                         sender: this.sender,
                         message: this.message
                     }));
                 this.message = '';
             },
-
+            updateCheck(roomId) {
+                this.chatRooms.forEach(room => {
+                    if (room.roomId === this.roomId) {
+                        room.checked = false;
+                    } else if (room.roomId === roomId) {
+                        room.checked = true;
+                    }
+                })
+            },
             connect() {
                 socket = new SockJS("/ws-stomp");
                 ws = Stomp.over(socket);
                 let reconnect = 0;
 
                 ws.connect({}, (frame) => {
-                    ws.subscribe("/sub/chat/room/" + this.currentRoomId, (message) => {
+                    ws.subscribe("/sub/chat/room/" + this.roomId, (message) => {
                         let recv = JSON.parse(message.body);
                         this.recvMessage(recv);
                     });
                     ws.send("/pub/chat/message", {}, JSON.stringify({
                         messageType: "JOIN",
-                        roomId: this.currentRoomId,
+                        roomId: this.roomId,
                         sender: this.sender,
                         message: ""
                     }));
@@ -140,6 +168,10 @@
             }
         }
     });
-
+    Vue.component('welcome', {
+        props: ['recv'],
+        template: '<div class="flex justify-center text-sm decoration-zinc-800">' +
+            '{{ recv.sender }} 님이 입장하셨습니다.</div>'
+    })
 </script>
 </html>
