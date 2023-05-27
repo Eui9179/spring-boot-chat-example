@@ -1,4 +1,4 @@
-package site.leui.chat_example.redis.service;
+package site.leui.chat_example.base.redis.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,7 @@ public class RedisSubscriber implements MessageListener {
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Object> redisTemplate;
     private final SimpMessageSendingOperations messageTemplate;
-    
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {

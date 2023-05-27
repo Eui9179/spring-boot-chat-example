@@ -5,13 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Slf4j
 @Getter
 @AllArgsConstructor
 @Builder
-public class ChatRoom {
+public class ChatRoom implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String roomId;
     private String name;
 
@@ -21,4 +26,6 @@ public class ChatRoom {
                 .roomId(UUID.randomUUID().toString())
                 .build();
     }
+
+
 }

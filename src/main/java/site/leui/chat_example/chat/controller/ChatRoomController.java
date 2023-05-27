@@ -2,7 +2,6 @@ package site.leui.chat_example.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import site.leui.chat_example.chat.dto.ChatRoom;
 import site.leui.chat_example.chat.service.ChatRoomService;
@@ -23,6 +22,8 @@ public class ChatRoomController {
     @GetMapping("/chat/rooms")
     @ResponseBody
     public List<ChatRoom> getRooms() {
+        List<ChatRoom> rooms = chatRoomService.findAll();
+        System.out.println(rooms);
         return chatRoomService.findAll();
     }
 

@@ -1,4 +1,4 @@
-package site.leui.chat_example.base;
+package site.leui.chat_example.base.redis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

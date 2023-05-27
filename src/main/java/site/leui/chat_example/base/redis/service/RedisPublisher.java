@@ -1,4 +1,4 @@
-package site.leui.chat_example.redis.service;
+package site.leui.chat_example.base.redis.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

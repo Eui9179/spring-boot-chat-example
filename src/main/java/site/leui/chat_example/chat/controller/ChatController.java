@@ -2,22 +2,26 @@ package site.leui.chat_example.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import site.leui.chat_example.chat.dto.ChatMessage;
+import site.leui.chat_example.chat.service.ChatRoomService;
+import site.leui.chat_example.base.redis.service.RedisPublisher;
 
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
 
-    private final SimpMessageSendingOperations messagingTemplate;
+    private final RedisPublisher redisPublisher;
+    private final ChatRoomService chatRoomService;
 
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage message) {
-        if (isJoin(message))
-            message.setMessage(message.getSender() + "님이 입장하였습니다");
+        if (isJoin(message)) {
 
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+            chatRoomService.enterChatRoom(message.getRoomId());
+            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+        }
+        redisPublisher.publish(chatRoomService.getTopic(message.getRoomId()), message);
     }
 
     private boolean isJoin(ChatMessage messageType) {
