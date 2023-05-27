@@ -39,7 +39,18 @@
         <div class="border border-inherit"></div>
 
         <!--    채팅 내용    -->
-        <div class="flex flex-col justify-end w-full">
+        <div class="flex flex-col-reverse justify-start w-full overflow-y-scroll">
+            <!--     채팅 입력 input     -->
+            <div class="mb-3 mt-5">
+                <div class="flex justify-between">
+                    <label class="w-full ml-3">
+                        <input type="text" placeholder="메시지를 입력해주세요" class="w-full" v-model="message"
+                               @keyup.enter="sendMessage"/>
+                    </label>
+                    <button class="min-w-[8%]" @click="sendMessage">전송</button>
+                </div>
+            </div>
+            <!--    채팅 내역        -->
             <div class="my-1" v-for="(recv, i) in messages" v-bind:key="i">
                 <div v-if="recv.messageType === 'JOIN'">
                     <welcome v-bind:recv="recv"></welcome>
@@ -59,16 +70,7 @@
                     </div>
                 </div>
             </div>
-            <!--     채팅 입력 input     -->
-            <div class="mb-3 mt-5">
-                <div class="flex justify-between">
-                    <label class="w-full ml-3">
-                        <input type="text" placeholder="메시지를 입력해주세요" class="w-full" v-model="message"
-                               @keyup.enter="sendMessage"/>
-                    </label>
-                    <button class="min-w-[8%]" @click="sendMessage">전송</button>
-                </div>
-            </div>
+
         </div>
         <!--   세로선 채팅창 오른쪽     -->
         <div class="border border-inherit"></div>
@@ -80,16 +82,15 @@
 <script>
     let socket;
     let ws;
-    // vue
-    const vm = new Vue({
+    new Vue({
         el: '#app',
         data: {
             chatRooms: [],
             messages: [],
+            belongedRooms: [],
             roomId: "",
             message: "",
             sender: "",
-
         },
         created() {
             axios.get('/chat/rooms').then(response => {
@@ -107,7 +108,7 @@
         methods: {
             addMessage(recv) {
                 recv.isMe = recv.sender === this.sender;
-                this.messages.push(recv);
+                this.messages.unshift(recv);
             },
             connectRoom(roomId) {
                 if (roomId !== this.roomId) {
@@ -121,6 +122,8 @@
                 this.addMessage(recv);
             },
             sendMessage() {
+                if (this.message === "") return;
+
                 ws.send("/pub/chat/message", {},
                     JSON.stringify({
                         messageType: 'TALK',
@@ -140,6 +143,9 @@
                 })
             },
             connect() {
+                if (this.belongedRooms.includes(this.roomId)) return;
+                this.belongedRooms.push(this.roomId);
+
                 socket = new SockJS("/ws-stomp");
                 ws = Stomp.over(socket);
                 let reconnect = 0;
