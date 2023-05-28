@@ -15,3 +15,5 @@
 - 채팅 방 Redis에 저장
 - Redis pub/sub 기능 사용
 - UI 개선
+
+![chatv3](https://github.com/Eui9179/spring-boot-chat-example/assets/83222282/47e3976b-11f9-4f23-ad4f-0a7842f1dc45)
