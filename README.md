@@ -12,4 +12,6 @@
 ![화면_기록_2023-05-26_오후_2_21_00_AdobeExpress (1)](https://github.com/Eui9179/spring-boot-chat-example/assets/83222282/c3477233-4063-492d-8e3b-5755cdb7c68a)
 
 ### v3
-- 채팅 내역 redis에 저장
+- 채팅 방 Redis에 저장
+- Redis pub/sub 기능 사용
+- UI 개선
