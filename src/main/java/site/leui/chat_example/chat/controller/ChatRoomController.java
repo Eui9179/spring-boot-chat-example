@@ -22,8 +22,6 @@ public class ChatRoomController {
     @GetMapping("/chat/rooms")
     @ResponseBody
     public List<ChatRoom> getRooms() {
-        List<ChatRoom> rooms = chatRoomService.findAll();
-        System.out.println(rooms);
         return chatRoomService.findAll();
     }
 

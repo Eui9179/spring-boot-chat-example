@@ -19,6 +19,7 @@ public class ChatRoomRepository {
     @PostConstruct
     private void init() {
         opsHashChatRoom = redisTemplate.opsForHash();
+        opsHashChatRoom.delete(CHAT_ROOMS);
         for (int i = 0; i < 5; i++) {
             ChatRoom chatRoom = ChatRoom.of("test_" + i);
             opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
